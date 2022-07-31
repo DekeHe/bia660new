@@ -84,3 +84,67 @@ for k in range(mdl.k_g):  # mdl.k_,mdl.k_g+mdl.k_l):
     print(k, topk_words)
     print()
 
+
+
+
+
+
+
+
+##new
+from nltk.corpus import stopwords
+
+import tomotopy
+import numpy
+import builtins
+import  re
+##
+stopwords=stopwords.words('english')
+# print(stopwords)
+
+def f(str):
+    r=[]
+    a=str.strip().split()
+    for i in range(len(a)):
+        a[i]=re.sub('[^a-z]','',a[i].lower())
+    # print(a)
+    for v in a:
+        if v not in stopwords and len(v)>2:
+            r.append(v)
+    return r
+
+lm=tomotopy.MGLDAModel(k_g=10,k_l=5)
+
+i=0
+with builtins.open('news.txt') as ti:
+
+
+    r=[]
+    for str in ti:
+        i+=1
+        if i==10:break
+        lm.add_doc(f(str))
+
+
+for i in range(0,500,10):
+    lm.train(10)
+    # print(i,lm.ll_per_word)
+
+# print(len(lm.docs))
+# for v in lm.docs:
+#     for p in v.get_topic_dist():
+#         print(round(p,2))
+
+# print(lm)
+
+for i in range(lm.k):
+    r=[]
+    temp=lm.get_topic_words(i,top_n=5)
+    for v in temp:
+        r.append( v[0])
+    print(r)
+    # print()
+
+
+
+
